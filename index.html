@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-opacity: .5;
+  stroke-width: .5px;
+}
+
+.land {
+  fill: #222;
+}
+
+.legend circle {
+  fill: none;
+  stroke: #ccc;
+}
+
+.points circle {
+  fill: #fff;
+  stroke: red;
+  stroke-width: 2px;
+}
+
+.bubble {
+  fill: red;
+  fill-opacity: .5;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+
+var width = 960,
+    height = 960;
+
+var projection = d3.geo.mercator()
+    .scale((width + 1) / 2 / Math.PI)
+    .translate([width / 2, height / 2])
+    .precision(.1);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var graticule = d3.geo.graticule();
+
+function randomInt(magnitude) {
+    return Math.floor(Math.random()*magnitude);
+  }
+
+var x = randomInt(20);
+var y = randomInt(30);
+
+var coords = [x,y];
+
+var tweets = [coords];
+
+var places = {
+  HNL: [-157 - 55 / 60 - 21 / 3600, 21 + 19 / 60 + 07 / 3600],
+  HKG: [113 + 54 / 60 + 53 / 3600, 22 + 18 / 60 + 32 / 3600],
+  SVO: [37 + 24 / 60 + 53 / 3600, 55 + 58 / 60 + 22 / 3600],
+  HAV: [-82 - 24 / 60 - 33 / 3600, 22 + 59 / 60 + 21 / 3600],
+  CCS: [-66 - 59 / 60 - 26 / 3600, 10 + 36 / 60 + 11 / 3600],
+  UIO: [-78 - 21 / 60 - 31 / 3600, 0 + 06 / 60 + 48 / 3600]
+};
+
+var places2 = {
+
+};
+
+
+
+
+var route = {
+  type: "LineString",
+  coordinates: [
+    places.HNL,
+    places.HKG,
+    places.SVO,
+    places.HAV,
+    places.CCS,
+    places.UIO
+  ]
+};
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("path")
+    .datum(graticule)
+    .attr("class", "graticule")
+    .attr("d", path);
+
+var point = svg.append("g")
+    .attr("class", "points")
+  .selectAll("g")
+    .data(d3.entries(places))
+  .enter().append("g")
+    .attr("transform", function(d) { return "translate(" + projection(d.value) + ")"; });
+
+point.append("circle")
+    .attr("r", 1);
+
+
+var n = 500,
+    random = d3.random.normal(0, 230),
+    data = [d3.range(n).map(random), d3.range(n).map(random)];
+
+var circle = svg.selectAll("circle")
+    .data(d3.entries(data));
+
+update();
+
+function update() {
+  var circs = svg.append("g")
+    .attr("class", "points")
+  .selectAll("g")
+  .enter().append("g")
+    .attr("transform", function(d) { return "translate(" + projection(data) + ")"; });
+
+  circs.append("circle")
+    .attr("r", 1);
+}
+
+
+
+d3.json("http://bl.ocks.org/mbostock/raw/4090846/world-50m.json", function(error, world) {
+  svg.insert("path", ".graticule")
+      .datum(topojson.feature(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+  svg.insert("path", ".graticule")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "boundary")
+      .attr("d", path);
+  
+  svg.append("g")
+      .attr("class", "bubble")
+    .selectAll("circle")
+      .data(topojson.feature(world, point))
+    .enter().append("circle")
+      .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+      .attr("r", function(d) { return radius(d.properties); })
+});
+
+
+d3.select(self.frameElement).style("height", height + "px");
+
+</script>
