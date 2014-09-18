@@ -15,10 +15,10 @@ import sys
 # See https://dev.twitter.com/docs/auth/oauth for more information
 # on Twitter's OAuth implementation.
 
-API_KEY = 'oPrlTTT2gHiBO5Xen0j262qrU'
-API_SECRET = '3pI1gKCqKOQ2KGaUy4ArFHHNWTscijaNRAegkXmH0QJj874lYc'
-OAUTH_TOKEN = '2451265213-8hTognpu55l8Dp86KJ9GKG8D2vNQVuVtJfXMpSe'
-OAUTH_TOKEN_SECRET = 'i8iWd6KnYWC2fXT5mIG0UXJFLc8HlMuhFlR0kP5pkhxlm'
+API_KEY = '***'
+API_SECRET = '***'
+OAUTH_TOKEN = '***'
+OAUTH_TOKEN_SECRET = '***'
 
 DEFAULT_HASH = "e"
 
@@ -29,10 +29,6 @@ query = DEFAULT_HASH
 count = 10000
 
 twitter_api = twitter.Twitter(auth=auth)
-
-###################################
-# Phase 1: The Feelings in Tweets #
-###################################
 
 
 def make_tweet(text, time, lat, lon):
@@ -56,18 +52,15 @@ def make_tweet(text, time, lat, lon):
 
 def tweet_words(tweet):
     """Return a list of the words in the text of a tweet."""
-    "*** YOUR CODE HERE ***"
     t = tweet['text']
     return t.split()
 
 def tweet_time(tweet):
     """Return the datetime that represents when the tweet was posted."""
-    "*** YOUR CODE HERE ***"
     return tweet['time']
 
 def tweet_location(tweet):
     """Return a position (see geo.py) that represents the tweet's location."""
-    "*** YOUR CODE HERE ***"
     return make_position(tweet['latitude'], tweet['longitude'])
 
 def tweet_string(tweet):
@@ -89,7 +82,6 @@ def extract_words(text):
     >>> extract_words('@(cat$.on^#$my&@keyboard***@#*')
     ['cat', 'on', 'my', 'keyboard']
     """
-    "*** YOUR CODE HERE ***"
     
 
     i = 0
@@ -144,7 +136,6 @@ def make_sentiment(value):
     0
     """
     assert value is None or (value >= -1 and value <= 1), 'Illegal value'
-    "*** YOUR CODE HERE ***"
     if value is None:
         return (False, value)
     else:
@@ -152,13 +143,11 @@ def make_sentiment(value):
 
 def has_sentiment(s):
     """Return whether sentiment s has a value."""
-    "*** YOUR CODE HERE ***"
     return s[0]
 
 def sentiment_value(s):
     """Return the value of a sentiment s."""
     assert has_sentiment(s), 'No sentiment value'
-    "*** YOUR CODE HERE ***"
     return s[1]
 
 def get_word_sentiment(word):
@@ -196,7 +185,6 @@ def analyze_tweet_sentiment(tweet):
     False
     """
     average = make_sentiment(None)
-    "*** YOUR CODE HERE ***"
     i = 0
     analyzed = 0
     count = 0
