@@ -61,12 +61,6 @@ function randomInt(magnitude) {
     return Math.floor(Math.random()*magnitude);
   }
 
-var x = randomInt(20);
-var y = randomInt(30);
-
-var coords = [x,y];
-
-var tweets = [coords];
 
 var places = {
   HNL: [-157 - 55 / 60 - 21 / 3600, 21 + 19 / 60 + 07 / 3600],
@@ -76,11 +70,6 @@ var places = {
   CCS: [-66 - 59 / 60 - 26 / 3600, 10 + 36 / 60 + 11 / 3600],
   UIO: [-78 - 21 / 60 - 31 / 3600, 0 + 06 / 60 + 48 / 3600]
 };
-
-var places2 = {
-
-};
-
 
 
 
@@ -115,20 +104,15 @@ var point = svg.append("g")
 point.append("circle")
     .attr("r", 1);
 
-
 var n = 500,
     random = d3.random.normal(0, 230),
     data = [d3.range(n).map(random), d3.range(n).map(random)];
-
-var circle = svg.selectAll("circle")
-    .data(d3.entries(data));
-
-update();
 
 function update() {
   var circs = svg.append("g")
     .attr("class", "points")
   .selectAll("g")
+    .data(d3.entries(places))
   .enter().append("g")
     .attr("transform", function(d) { return "translate(" + projection(data) + ")"; });
 
@@ -136,7 +120,7 @@ function update() {
     .attr("r", 1);
 }
 
-
+update();
 
 d3.json("http://bl.ocks.org/mbostock/raw/4090846/world-50m.json", function(error, world) {
   svg.insert("path", ".graticule")
