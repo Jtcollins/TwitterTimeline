@@ -160,7 +160,7 @@ def get_word_sentiment(word):
     -0.625
     >>> sentiment_value(get_word_sentiment('winning'))
     0.5
-    >>> has_sentiment(get_word_sentiment('Berkeley'))
+    >>> has_sentiment(get_word_sentiment('California'))
     False
     """
     # Learn more: http://docs.python.org/3/library/stdtypes.html#dict.get
